@@ -32,7 +32,7 @@ public class RestEnpoints {
     @PostMapping("/postNothing")
     public void getResponseEntity(@RequestBody String body) {
 
-        boolean valid = validator.validate(body, SCHEMA_FILE);
+//        boolean valid = validator.validate(body, SCHEMA_FILE);
 
 
 //        System.out.println("XML is valid:" + valid);
