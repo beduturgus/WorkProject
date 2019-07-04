@@ -1,14 +1,2 @@
 server:
   port: 8089
-  servlet:
-    context-path: /api/postNothing
-
-security:
-  oauth2:
-    client:
-      clientId: MyClientId
-      clientSecret: secret
-      accessTokenUri: http://localhost:8089/auth/oauth/token
-      userAuthorizationUri: http://localhost:8089/auth/oauth/authorize
-    resource:
-      userInfoUri: http://localhost:8089/auth/api/postNothing

@@ -1,5 +1,8 @@
 package my.project.BenasProject.services;
 
+import my.project.BenasProject.rest.RestEnpoints;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.xml.sax.SAXException;
 
@@ -13,34 +16,22 @@ import java.net.URL;
 import java.util.Objects;
 
 @Service
-public class XMLValidation {
+public class XMLValidationService {
 
-    public boolean validate(String xmlFile, String xsdFile){
+    private final Logger log = LoggerFactory.getLogger(XMLValidationService.class);
 
+    public void validate(String xmlFile, String xsdFile) throws IOException, SAXException {
         SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
         Reader reader = new StringReader(xmlFile);
-
-        try{
-            Schema schema = schemaFactory.newSchema(new File(getResource(xsdFile)));
-            Validator validator = schema.newValidator();
-            validator.validate(new StreamSource(reader));
-            return true;
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return false;
-        } catch (SAXException e) {
-            e.printStackTrace();
-            return false;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
+        Schema schema = schemaFactory.newSchema(new File(getResource(xsdFile)));
+        Validator validator = schema.newValidator();
+        validator.validate(new StreamSource(reader));
+        log.info("Received XML is valid");
     }
 
-    private String getResource(String fileName) throws FileNotFoundException {
+    private String getResource(String fileName) {
         URL resource = getClass().getClassLoader().getResource(fileName);
         Objects.requireNonNull(resource);
-
         return resource.getFile();
     }
 }

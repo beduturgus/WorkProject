@@ -1,12 +1,19 @@
 package my.project.BenasProject.rest;
 
+import my.project.BenasProject.domain.Contactsinfo;
+import my.project.BenasProject.services.DbService;
 import my.project.BenasProject.services.PayloadEnrichService;
-import my.project.BenasProject.services.XMLValidation;
+import my.project.BenasProject.services.XMLValidationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.xml.sax.SAXException;
 
+import javax.xml.bind.JAXBException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.sql.SQLException;
 
 
 @RestController
@@ -14,36 +21,50 @@ import org.springframework.web.bind.annotation.*;
 public class RestEnpoints {
 
     @Autowired
-    XMLValidation validator;
+    XMLValidationService validator;
 
     @Autowired
     PayloadEnrichService payloadEnrichService;
 
+    @Autowired
+    DbService dbService;
+
     private final Logger log = LoggerFactory.getLogger(RestEnpoints.class);
 
-    public static final String XML_FILE = "note.xml";
     public static final String SCHEMA_FILE = "note.xsd";
 
-    public RestEnpoints(){
-        log.debug("Instance of Endpoints class created");
-        System.out.println("Instance of Endpoints class created sout");
+    @GetMapping("/getNothing")
+    public void getResponseEntity(){
+        System.out.println("Get response went through");
     }
 
     @PostMapping("/postNothing")
-    public void getResponseEntity(@RequestBody String body) {
-
-//        boolean valid = validator.validate(body, SCHEMA_FILE);
-
-
-//        System.out.println("XML is valid:" + valid);
+    public void postResponseEntity(@RequestBody String body) throws IOException, JAXBException, SAXException, SQLException, IllegalAccessException {
 
         System.out.println(body);
 
-//        payloadEnrichService.enrichPayload(body);
 
+        //Validate received XML
+        validator.validate(body, SCHEMA_FILE);
 
+        //Write validated XML to file
+        FileWriter writer = new FileWriter("/Users/benas/PROJECTS/WorkProject/data/consumable.xml");
+        writer.write(body);
+        writer.close();
 
+        //Convert Received XML to object
+        Contactsinfo contactsInfo = payloadEnrichService.convertToObject();
 
+        //Check if entry exists in database
+        boolean entryExsits = dbService.entryExisists(contactsInfo.getName());
 
+        //Store in database if entry does not exsist
+        if(!entryExsits){
+            //Add generated value for fields with empty value
+            Contactsinfo enrichedContactsInfo = payloadEnrichService.enrichPayload(contactsInfo);
+            dbService.addEntry(enrichedContactsInfo);
+            //Save json in file system
+            payloadEnrichService.jacksonPojoToJson(enrichedContactsInfo);
+        }
     }
 }

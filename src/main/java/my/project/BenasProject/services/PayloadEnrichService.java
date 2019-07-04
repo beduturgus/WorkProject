@@ -1,105 +1,67 @@
 package my.project.BenasProject.services;
 
-import org.modelmapper.ModelMapper;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import my.project.BenasProject.domain.Contactsinfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.util.FieldUtils;
 import org.springframework.stereotype.Service;
 
-import org.w3c.dom.*;
-import org.xml.sax.SAXException;
 
 import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.InputStream;
-import java.io.StringReader;
-import java.util.ArrayList;
+import java.io.*;
+import java.util.Date;
 
 @Service
 public class PayloadEnrichService {
 
-    private final String GENERATED_VALUE = "Generated value";
+    private final Logger log = LoggerFactory.getLogger(PayloadEnrichService.class);
 
-    public String enrichPayload(String payload) throws SAXException, JAXBException {
-
-//        File xmlFile = new File(payload);
-//
-//        JAXBContext jaxbContext = JAXBContext.newInstance(ContactsInfo.class);
-//
-//        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-//
-//        ContactsInfo contactsInfo = (ContactsInfo) jaxbUnmarshaller.unmarshal(new StringReader(payload));
+    private final String jsonPath = "/Users/benas/PROJECTS/WorkProject/data/json/contactsinfo.json";
+    private final String GENERATED_VALUE = "GeneratedValue";
+    private final String[] fields = new String[]{"name", "company", "phone", "empty", "filler"};
+    Date date = new Date();
 
 
 
+    public Contactsinfo convertToObject() throws JAXBException {
+        File file = new File("/Users/benas/PROJECTS/WorkProject/data/consumable.xml");
+        JAXBContext jaxbContext = JAXBContext.newInstance(Contactsinfo.class);
+        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+        Contactsinfo contactsInfo = (Contactsinfo) jaxbUnmarshaller.unmarshal(file);
+        log.info("XML is converted to object");
+        return contactsInfo;
+    }
 
-        NodeList nodes = convertStringToDocument(payload).getDocumentElement().getElementsByTagName("*");
-        Element element = convertStringToDocument(payload).getDocumentElement();
-        ArrayList<String> names = new ArrayList<>();
+    public void jacksonPojoToJson(Contactsinfo contactsinfo) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.enable(SerializationFeature.INDENT_OUTPUT);
 
+        //Convert object to string
+        String json = mapper.writeValueAsString(contactsinfo);
 
-        for (int i = 0; i < nodes.getLength(); i++){
-            names.add(nodes.item(i).getNodeName());
-        }
+        //Write JSON string to file
+        FileWriter fileWriter = new FileWriter(jsonPath, true);
+        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+        bufferedWriter.write(json + '\n' + date.getTime() + '\n' + '\n');
 
-        for(int i = 0; i < names.size(); i++){
+        bufferedWriter.close();
+        fileWriter.close();
+        log.info("File was saved as JSON");
+    }
 
-            try{
-                if(element.getElementsByTagName(names.get(i)).item(0).getFirstChild() == null){
-                    System.out.println("Value will generate");
-                    element.getElementsByTagName(names.get(i)).item(0).setTextContent(GENERATED_VALUE);
-                    System.out.println("Value was generated");
-                }
-            }catch(NullPointerException e){
-                System.out.println(e);
+    public Contactsinfo enrichPayload(Contactsinfo contactsinfo) throws IllegalAccessException {
+        for(String field : fields){
+            if (FieldUtils.getFieldValue(contactsinfo, field).equals("")){
+                contactsinfo.setValueByFieldName(field, GENERATED_VALUE);
+                log.info("Generated value was added for: " + field);
             }
         }
-
-
-
-
-
-        System.out.println("Are here");
-        return convertElementToString(element);
+        return contactsinfo;
     }
 
-    public Document convertStringToDocument(String str){
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-
-        DocumentBuilder builder = null;
-
-        InputStream stream = new ByteArrayInputStream(str.getBytes());
-
-        try
-        {
-            //Create DocumentBuilder with default configuration
-            builder = factory.newDocumentBuilder();
-
-            //Parse the content to Document object
-            Document doc = builder.parse(stream);
-            return doc;
-        } catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public String convertElementToString(Element element){
-//        Document doc = element;
-        return "belekas";
-    }
-
-    public void mapContactsInfoDTO(String payload){
-        ModelMapper mapper = new ModelMapper();
-//        ContactsInfoDTO contactsInfoDTO = mapper.map();
-    }
-
-//    public void replaceEmptyNodes(ArrayList<String> names){
-//
-//
-//    }
 }

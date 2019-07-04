@@ -1,4 +1,4 @@
-create table "user" (
+create table "contactsinfo" (
   name varchar(255) not null,
   company varchar(50) not null,
   phone varchar(50) not null,

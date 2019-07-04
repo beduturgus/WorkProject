@@ -2,14 +2,14 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
       <!-- XML Schema Generated from XML Document on Mon May 27 2019 19:03:45 GMT+0300 (Eastern European Summer Time) -->
       <!-- with XmlGrid.net Free Online Service http://xmlgrid.net -->
-      <xs:element name="contact-info">
+      <xs:element name="contactsinfo">
             <xs:complexType>
                   <xs:sequence>
-                        <xs:element name="name" type="xs:string"></xs:element>
-                        <xs:element name="company" type="xs:string"></xs:element>
-                        <xs:element name="phone" type="xs:string"></xs:element>
-                        <xs:element name="empty" type="xs:string" nillable="true"></xs:element>
-                        <xs:element name="filler" type="xs:string" nillable="true"></xs:element>
+                        <xs:element name="name" type="xs:string"/>
+                        <xs:element name="company" type="xs:string"/>
+                        <xs:element name="phone" type="xs:string"/>
+                        <xs:element name="empty" type="xs:string" nillable="true"/>
+                        <xs:element name="filler" type="xs:string" nillable="true"/>
                   </xs:sequence>
             </xs:complexType>
       </xs:element>
