@@ -3,7 +3,6 @@ package my.project.BenasProject.rest;
 import my.project.BenasProject.domain.ContactsInfo;
 import my.project.BenasProject.services.DbService;
 import my.project.BenasProject.services.PayloadEnrichService;
-import my.project.BenasProject.services.XMLValidationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +18,6 @@ import java.sql.SQLException;
 @RestController
 @RequestMapping("/api")
 public class RestEnpoints {
-
-    @Autowired
-    XMLValidationService validator;
 
     @Autowired
     PayloadEnrichService payloadEnrichService;
@@ -43,10 +39,6 @@ public class RestEnpoints {
 
         System.out.println(body);
 
-
-//        //Validate received XML
-//        validator.validate(body, SCHEMA_FILE);
-//
 //        //Write validated XML to file
 //        FileWriter writer = new FileWriter("/Users/benas/PROJECTS/WorkProject/data/consumable.xml");
 //        writer.write(body);

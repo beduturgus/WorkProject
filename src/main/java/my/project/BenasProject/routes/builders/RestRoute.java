@@ -1,16 +1,26 @@
 package my.project.BenasProject.routes.builders;
 
+import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 import org.springframework.stereotype.Component;
 
 @Component
 public class RestRoute extends RouteBuilder {
 
+    private Processor validationProcessor;
+
+    public RestRoute(Processor validationProcessor){
+        this.validationProcessor = validationProcessor;
+    }
+
     @Override
-    public void configure() throws Exception {
+    public void configure() {
         rest("/api")
                 .post("/postNothing")
-                .to("file://Users/benas/PROJECTS/Playground/BenasProject/data/routes/route_input/output.txt");
+                .to("direct:validate");
 
+        from("direct:validate")
+            .process(validationProcessor)
+            .to()
     }
 }

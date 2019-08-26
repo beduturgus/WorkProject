@@ -1,6 +1,5 @@
 package my.project.BenasProject.routes.builders;
 
-import org.apache.camel.LoggingLevel;
 import org.apache.camel.builder.RouteBuilder;
 import org.springframework.stereotype.Component;
 
@@ -12,9 +11,6 @@ public class MyRoute extends RouteBuilder {
 
     @Override
     public void configure() {
-        from("quartz2://logMessageGroup/logMessageTimer?cron=0/5+*+*+*+*+?")
-                .log(LoggingLevel.INFO, "Route was activated");
-//                .to("file://" + DESTINATION_FILE);
 
     }
 }
