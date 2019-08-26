@@ -1,6 +1,6 @@
 package my.project.BenasProject.rest;
 
-import my.project.BenasProject.domain.Contactsinfo;
+import my.project.BenasProject.domain.ContactsInfo;
 import my.project.BenasProject.services.DbService;
 import my.project.BenasProject.services.PayloadEnrichService;
 import my.project.BenasProject.services.XMLValidationService;
@@ -44,27 +44,27 @@ public class RestEnpoints {
         System.out.println(body);
 
 
-        //Validate received XML
-        validator.validate(body, SCHEMA_FILE);
-
-        //Write validated XML to file
-        FileWriter writer = new FileWriter("/Users/benas/PROJECTS/WorkProject/data/consumable.xml");
-        writer.write(body);
-        writer.close();
-
-        //Convert Received XML to object
-        Contactsinfo contactsInfo = payloadEnrichService.convertToObject();
-
-        //Check if entry exists in database
-        boolean entryExsits = dbService.entryExisists(contactsInfo.getName());
-
-        //Store in database if entry does not exsist
-        if(!entryExsits){
-            //Add generated value for fields with empty value
-            Contactsinfo enrichedContactsInfo = payloadEnrichService.enrichPayload(contactsInfo);
-            dbService.addEntry(enrichedContactsInfo);
-            //Save json in file system
-            payloadEnrichService.jacksonPojoToJson(enrichedContactsInfo);
-        }
+//        //Validate received XML
+//        validator.validate(body, SCHEMA_FILE);
+//
+//        //Write validated XML to file
+//        FileWriter writer = new FileWriter("/Users/benas/PROJECTS/WorkProject/data/consumable.xml");
+//        writer.write(body);
+//        writer.close();
+//
+//        //Convert Received XML to object
+//        ContactsInfo contactsInfo = payloadEnrichService.convertToObject();
+//
+//        //Check if entry exists in database
+//        boolean entryExsits = dbService.entryExisists(contactsInfo.getName());
+//
+//        //Store in database if entry does not exsist
+//        if(!entryExsits){
+//            //Add generated value for fields with empty value
+//            ContactsInfo enrichedContactsInfo = payloadEnrichService.enrichPayload(contactsInfo);
+//            dbService.addEntry(enrichedContactsInfo);
+//            //Save json in file system
+//            payloadEnrichService.jacksonPojoToJson(enrichedContactsInfo);
+//        }
     }
 }

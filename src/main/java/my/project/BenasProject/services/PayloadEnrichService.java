@@ -1,9 +1,8 @@
 package my.project.BenasProject.services;
 
-import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import my.project.BenasProject.domain.Contactsinfo;
+import my.project.BenasProject.domain.ContactsInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.util.FieldUtils;
@@ -27,41 +26,41 @@ public class PayloadEnrichService {
     Date date = new Date();
 
 
-
-    public Contactsinfo convertToObject() throws JAXBException {
+    public ContactsInfo convertToObject() throws JAXBException {
         File file = new File("/Users/benas/PROJECTS/WorkProject/data/consumable.xml");
-        JAXBContext jaxbContext = JAXBContext.newInstance(Contactsinfo.class);
+        JAXBContext jaxbContext = JAXBContext.newInstance(ContactsInfo.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-        Contactsinfo contactsInfo = (Contactsinfo) jaxbUnmarshaller.unmarshal(file);
+        ContactsInfo contactsInfo = (ContactsInfo) jaxbUnmarshaller.unmarshal(file);
         log.info("XML is converted to object");
         return contactsInfo;
     }
 
-    public void jacksonPojoToJson(Contactsinfo contactsinfo) throws IOException {
+
+    public void jacksonPojoToJson(ContactsInfo contactsInfo) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
 
         //Convert object to string
-        String json = mapper.writeValueAsString(contactsinfo);
+        String json = mapper.writeValueAsString(contactsInfo);
 
         //Write JSON string to file
-        FileWriter fileWriter = new FileWriter(jsonPath, true);
-        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-        bufferedWriter.write(json + '\n' + date.getTime() + '\n' + '\n');
-
-        bufferedWriter.close();
-        fileWriter.close();
+        try (
+                FileWriter fileWriter = new FileWriter(jsonPath, true);
+                BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+        ) {
+            bufferedWriter.write(json + '\n' + date.getTime() + '\n' + '\n');
+        }
         log.info("File was saved as JSON");
     }
 
-    public Contactsinfo enrichPayload(Contactsinfo contactsinfo) throws IllegalAccessException {
-        for(String field : fields){
-            if (FieldUtils.getFieldValue(contactsinfo, field).equals("")){
-                contactsinfo.setValueByFieldName(field, GENERATED_VALUE);
+    public ContactsInfo enrichPayload(ContactsInfo contactsInfo) throws IllegalAccessException {
+        for (String field : fields) {
+            if (FieldUtils.getFieldValue(contactsInfo, field).equals("")) {
+                contactsInfo.setValueByFieldName(field, GENERATED_VALUE);
                 log.info("Generated value was added for: " + field);
             }
         }
-        return contactsinfo;
+        return contactsInfo;
     }
 
 }

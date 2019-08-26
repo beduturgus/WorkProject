@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
       <!-- XML Schema Generated from XML Document on Mon May 27 2019 19:03:45 GMT+0300 (Eastern European Summer Time) -->
       <!-- with XmlGrid.net Free Online Service http://xmlgrid.net -->
-      <xs:element name="contactsinfo">
+      <xs:element name="contactsInfo">
             <xs:complexType>
                   <xs:sequence>
                         <xs:element name="name" type="xs:string"/>
