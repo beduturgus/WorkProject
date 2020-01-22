@@ -2,7 +2,6 @@ package my.project.BenasProject.routes.processors;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.Reader;
 import java.io.StringReader;
 import java.net.URL;
 import java.util.Objects;
@@ -21,33 +20,34 @@ import org.xml.sax.SAXException;
 
 
 /**
- * Validates against xsd scheema stored in resources/note.xsd
+ * Validates against xsd scheema stored in resources/contactsInfoSchema.xsd
  */
 
 @Component
 public class ValidationProcessor implements Processor {
-
     private final Logger LOGGER = LoggerFactory.getLogger(ValidationProcessor.class);
 
     @Override
     public void process(Exchange exchange) throws IOException {
         Message message = exchange.getIn();
-        String body = (String) message.getBody();
-        System.out.println(body + "Is being validated agains xsd schema");
-        boolean valid = isValid(body, "note.xsd");
-        if(valid)exchange.setOut(message);
+        String body = message.getBody(String.class);
+        boolean valid = isValid(body, "contactsInfoSchema.xsd");
+        if (valid) {
+            message.setBody(body);
+            exchange.setOut(message);
+        }
     }
 
     private boolean isValid(String xmlFile, String xsdFile) throws IOException {
         SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
         StreamSource xmlStream = new StreamSource(new StringReader(xmlFile));
-        try{
+        try {
             Schema schema = schemaFactory.newSchema(new File(getResource(xsdFile)));
             Validator validator = schema.newValidator();
             validator.validate(xmlStream);
             LOGGER.info("Received XML is valid");
             return true;
-        }catch (SAXException exception){
+        } catch (SAXException exception) {
             LOGGER.warn("XML is invalid. Reason: " + exception);
             return false;
         }

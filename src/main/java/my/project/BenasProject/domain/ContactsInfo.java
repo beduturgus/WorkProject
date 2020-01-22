@@ -1,38 +1,40 @@
 package my.project.BenasProject.domain;
 
+import java.io.Serializable;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import org.springframework.lang.Nullable;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement
-@Table(schema = "users")
-public class ContactsInfo {
+public class ContactsInfo implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @NotNull
-    private String name;
 
     @NotNull
-    private  String company;
-
-    @NotNull
-    private Integer phone;
-
-    @Nullable
-    private String empty;
-
-    @Nullable
-    private String filler;
-
-
     @XmlElement
+    public String name;
+
+    @NotNull
+    @XmlElement
+    public String company;
+
+    @NotNull
+    @XmlElement
+    public Integer phone;
+
+    @Nullable
+    @XmlElement
+    public String empty;
+
+    @Nullable
+    @XmlElement
+    public String filler;
+
+
     public String getName() {
         return name;
     }
@@ -41,7 +43,6 @@ public class ContactsInfo {
         this.name = name;
     }
 
-    @XmlElement
     public String getCompany() {
         return company;
     }
@@ -50,7 +51,6 @@ public class ContactsInfo {
         this.company = company;
     }
 
-    @XmlElement
     public Integer getPhone() {
         return phone;
     }
@@ -59,8 +59,6 @@ public class ContactsInfo {
         this.phone = phone;
     }
 
-    @XmlElement
-    @Nullable
     public String getEmpty() {
         return empty;
     }
@@ -69,8 +67,6 @@ public class ContactsInfo {
         this.empty = empty;
     }
 
-    @XmlElement
-    @Nullable
     public String getFiller() {
         return filler;
     }
@@ -79,24 +75,8 @@ public class ContactsInfo {
         this.filler = filler;
     }
 
-    public void setValueByFieldName(String fieldName, String newValue){
-        switch (fieldName){
-            case "name":
-                setName(newValue);
-                break;
-            case "company":
-                setCompany(newValue);
-                break;
-            case "phone":
-                setPhone(5);
-                break;
-            case "empty":
-                setEmpty(newValue);
-                break;
-            case "filler":
-                setFiller(newValue);
-                break;
-        }
-    }
-
+//    @Override
+//    public String toString(){
+//        return getName() + " " + getCompany() + " " + getPhone() + " " + getEmpty() + " " + getFiller();
+//    }
 }

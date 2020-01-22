@@ -8,12 +8,6 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 public class BenasProjectApplication {
 
     public static void main(String[] args) {
-
         SpringApplication.run(BenasProjectApplication.class, args);
-
-//		ApplicationContext context = new AnnotationConfigApplicationContext(SecurityConfig.class);
-
-//        System.out.println("asdasdasdasd");
     }
-
 }

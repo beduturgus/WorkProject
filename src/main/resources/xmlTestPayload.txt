@@ -1,5 +1,5 @@
 <contactsInfo>
-    <name>Zenius</name>
+    <name>joo</name>
     <company>Zenitech</company>
     <phone>123</phone>
     <empty></empty>
