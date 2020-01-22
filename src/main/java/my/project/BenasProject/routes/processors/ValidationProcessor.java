@@ -20,11 +20,12 @@ import org.xml.sax.SAXException;
 
 
 /**
- * Validates against xsd scheema stored in resources/contactsInfoSchema.xsd
+ * Component responsible for validating against xsd scheema stored in
+ * resources/contactsInfoSchema.xsd and sending it out.
  */
-
 @Component
 public class ValidationProcessor implements Processor {
+
     private final Logger LOGGER = LoggerFactory.getLogger(ValidationProcessor.class);
 
     @Override

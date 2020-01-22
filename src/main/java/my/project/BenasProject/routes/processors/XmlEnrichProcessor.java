@@ -9,6 +9,10 @@ import org.apache.camel.Message;
 import org.apache.camel.Processor;
 import org.springframework.stereotype.Component;
 
+/**
+ * Component responsible for finding empty fields in received payload, filling them with default
+ * value and sending it out.
+ */
 @Component
 public class XmlEnrichProcessor implements Processor {
 

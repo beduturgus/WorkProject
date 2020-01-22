@@ -14,6 +14,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+/**
+ * Component responsible for storing received data to database, converting to JSON format and
+ * sending it out.
+ */
 @Component
 public class DbProcessor implements Processor {
 

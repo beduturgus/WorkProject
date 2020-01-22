@@ -1,6 +1,5 @@
 package my.project.BenasProject.ProcessorsTests;
 
-import javax.rmi.CORBA.Util;
 import my.project.BenasProject.Utils;
 import my.project.BenasProject.domain.ContactsInfo;
 import my.project.BenasProject.routes.processors.DbProcessor;
@@ -49,12 +48,12 @@ public class DbProcessorTest {
 
     @Before
     public void setUp() throws Exception {
-        camelContext.getRoutes().clear();
         DbProcessor dbProcessor1 = Mockito.mock(dbProcessor.getClass());
         Mockito.doCallRealMethod().when(dbProcessor1).process(Mockito.any(Exchange.class));
-        Mockito.doNothing().when(dbProcessor1).persistData(Mockito.any(ContactsInfo.class));
-        Mockito.doCallRealMethod().when(dbProcessor1).convertToJsonString(Mockito.any(ContactsInfo.class));
+        Mockito.doCallRealMethod().when(dbProcessor1)
+            .convertToJsonString(Mockito.any(ContactsInfo.class));
         Mockito.doCallRealMethod().when(dbProcessor1).checkMessageType(Mockito.any(Message.class));
+        Mockito.doNothing().when(dbProcessor1).persistData(Mockito.any(ContactsInfo.class));
 
         camelContext.addRoutes(new RouteBuilder() {
             @Override
@@ -62,7 +61,6 @@ public class DbProcessorTest {
                 from(START_ENDPOINT).process(dbProcessor1).to(mockEndpoint);
             }
         });
-        camelContext.setStreamCaching(false);
         camelContext.start();
     }
 
