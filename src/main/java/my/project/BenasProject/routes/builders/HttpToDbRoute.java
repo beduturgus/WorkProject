@@ -36,3 +36,4 @@ public class HttpToDbRoute extends RouteBuilder {
             .to("file://" + DESTINATION_FOLDER);
     }
 }
+
