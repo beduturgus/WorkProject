@@ -1,6 +1,7 @@
 HELP.md
 /target/
 !.mvn/wrapper/maven-wrapper.jar
+data/routes/route_output
 
 ### STS ###
 .apt_generated
