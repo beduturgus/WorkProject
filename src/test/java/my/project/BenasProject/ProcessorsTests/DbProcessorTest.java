@@ -32,7 +32,7 @@ public class DbProcessorTest {
     private String PAYLOAD = Utils.getResource("xmlTestPayload.txt");
     private String EXPECTED = Utils.getResource("jsonExpectedPayload.txt");
 
-    private final String START_ENDPOINT = "jetty:http://0.0.0.0:8090/postNothing";
+    private final String START_ENDPOINT = "jetty:http://0.0.0.0:8090/contactsInfo";
 
     @Autowired
     private CamelContext camelContext;

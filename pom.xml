@@ -14,6 +14,8 @@
     <artifactId>BenasProject</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>WorkProject</name>
+    <packaging>jar</packaging>
+    <description>Personal project</description>
 
     <properties>
         <camel.version>2.24.0</camel.version>
@@ -186,6 +188,18 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.owasp</groupId>
+                <artifactId>dependency-check-maven</artifactId>
+                <version>5.3.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
