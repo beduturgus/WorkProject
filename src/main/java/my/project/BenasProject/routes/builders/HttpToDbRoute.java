@@ -26,7 +26,7 @@ public class HttpToDbRoute extends RouteBuilder {
 
     @Override
     public void configure() {
-        from("jetty:http://0.0.0.0:8090/postNothing")
+        from("jetty:http://0.0.0.0:8090/contactsInfo")
             //TODO error handling to be added
             .routeId("HttpToDbRoute")
             .log("Payload went through")

@@ -29,7 +29,7 @@ public class XmlEnrichProcessorTest {
 
 
     private final String PAYLOAD = Utils.getResource("xmlTestPayload.txt");
-    private final String START_ENDPOINT = "jetty:http://0.0.0.0:8090/postNothing";
+    private final String START_ENDPOINT = "jetty:http://0.0.0.0:8090/contactsInfo";
 
     @Autowired
     private CamelContext camelContext;

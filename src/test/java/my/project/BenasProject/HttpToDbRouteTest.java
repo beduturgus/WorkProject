@@ -52,7 +52,7 @@ public class HttpToDbRouteTest {
     @Mock
     DbProcessor dbProcessor;
 
-    private final String START_ENDPOINT = "jetty:http://0.0.0.0:8090/postNothing";
+    private final String START_ENDPOINT = "jetty:http://0.0.0.0:8090/contactsInfo";
     private final String EXPECTED_RESULT = "{\"name\":\"joo\",\"company\":\"Zenitech\",\"phone\":123,\"empty\":\"GeneratedValue\",\"filler\":\"kazkas kitas\"}";
     private final String PAYLOAD = Utils.getResource("xmlTestPayload.txt");
 
