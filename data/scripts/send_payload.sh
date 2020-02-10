@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 curl -i --header "Accept:application/json" -b /Users/benas/Notes/security/cookies.txt -d '<contactsInfo>
   <name>Zenius</name>
   <company>Zenitech</company>
