@@ -7,6 +7,8 @@ import my.project.BenasProject.domain.ContactsInfo;
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
 import org.apache.camel.Processor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 /**
@@ -15,6 +17,8 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class XmlEnrichProcessor implements Processor {
+
+    Logger LOGGER = LoggerFactory.getLogger(XmlEnrichProcessor.class);
 
     String GENERATED_VALUE = "GeneratedValue";
 
@@ -27,16 +31,18 @@ public class XmlEnrichProcessor implements Processor {
 
         ContactsInfo enrichedPayload = addDefaultFields(contactsInfo);
         message.setBody(enrichedPayload, ContactsInfo.class);
-        exchange.setOut(message);
     }
 
     private ContactsInfo addDefaultFields(ContactsInfo contactsInfo) throws IllegalAccessException {
+        int count = 0;
         for (Field field : contactsInfo.getClass().getDeclaredFields()) {
             String value = field.get(contactsInfo).toString();
             if (value.equals("")) {
+                count++;
                 field.set(contactsInfo, GENERATED_VALUE);
             }
         }
+        LOGGER.info(count + "fields were emty and now filled with string: " + GENERATED_VALUE);
         return contactsInfo;
     }
 }

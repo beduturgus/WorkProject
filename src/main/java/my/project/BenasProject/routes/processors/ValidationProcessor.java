@@ -48,10 +48,10 @@ public class ValidationProcessor implements Processor {
             Schema schema = schemaFactory.newSchema(new File(getResource(xsdFile)));
             Validator validator = schema.newValidator();
             validator.validate(xmlStream);
-            LOGGER.info("Received XML is valid");
+            LOGGER.info("Received XML is valid: {}", xmlFile);
             return true;
         } catch (SAXException exception) {
-            LOGGER.warn("XML is invalid. Reason: " + exception);
+            LOGGER.warn("XML validation failed: {}", xmlFile);
             return false;
         }
     }

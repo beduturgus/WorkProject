@@ -1,5 +1,6 @@
 package my.project.BenasProject.routes.builders;
 
+import java.util.Date;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ public class HttpToDbRoute extends RouteBuilder {
     public void configure() {
         from("jetty:http://0.0.0.0:8090/contactsInfo")
             .routeId("HttpToDbRoute")
-            .log("Payload went through")
+            .log("Payload is being send to validationProcessor at" + new Date().getTime())
             .process(validationProcessor)
             .process(xmlEnrichProcessor)
             .process(dbProcessor)

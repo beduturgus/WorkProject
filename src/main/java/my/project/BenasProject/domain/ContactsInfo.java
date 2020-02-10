@@ -74,9 +74,4 @@ public class ContactsInfo implements Serializable {
     public void setFiller(@Nullable String filler) {
         this.filler = filler;
     }
-
-//    @Override
-//    public String toString(){
-//        return getName() + " " + getCompany() + " " + getPhone() + " " + getEmpty() + " " + getFiller();
-//    }
 }
