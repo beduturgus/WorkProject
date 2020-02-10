@@ -1,12 +1,7 @@
 package my.project.BenasProject.routes.builders;
 
-import java.io.IOException;
-import java.sql.SQLException;
-import javax.xml.bind.JAXBException;
-import org.apache.camel.ErrorHandlerFactory;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.spi.RouteContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -27,7 +22,6 @@ public class HttpToDbRoute extends RouteBuilder {
     @Override
     public void configure() {
         from("jetty:http://0.0.0.0:8090/contactsInfo")
-            //TODO error handling to be added
             .routeId("HttpToDbRoute")
             .log("Payload went through")
             .process(validationProcessor)
