@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.net.URL;
 import java.util.Objects;
+import javax.validation.ValidationException;
 import javax.xml.XMLConstants;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
@@ -29,13 +30,14 @@ public class ValidationProcessor implements Processor {
     private final Logger LOGGER = LoggerFactory.getLogger(ValidationProcessor.class);
 
     @Override
-    public void process(Exchange exchange) throws IOException {
+    public void process(Exchange exchange) throws IOException, ValidationException {
         Message message = exchange.getIn();
         String body = message.getBody(String.class);
-        boolean valid = isValid(body, "contactsInfoSchema.xsd");
+        boolean valid = isValid(body, "schema/contactsInfoSchema.xsd");
         if (valid) {
             message.setBody(body);
-            exchange.setOut(message);
+        } else {
+            throw new ValidationException("Received XML does not validate against xsd schema. Payload: " +  body);
         }
     }
 
@@ -46,10 +48,10 @@ public class ValidationProcessor implements Processor {
             Schema schema = schemaFactory.newSchema(new File(getResource(xsdFile)));
             Validator validator = schema.newValidator();
             validator.validate(xmlStream);
-            LOGGER.info("Received XML is valid");
+            LOGGER.info("Received XML is valid:" + "\n" + "{}", xmlFile);
             return true;
         } catch (SAXException exception) {
-            LOGGER.warn("XML is invalid. Reason: " + exception);
+            LOGGER.warn("XML validation failed: {}", xmlFile);
             return false;
         }
     }

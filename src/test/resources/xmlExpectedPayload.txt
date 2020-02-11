@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<contactsInfo>
+    <name>joo</name>
+    <company>Zenitech</company>
+    <phone>123</phone>
+    <empty></empty>
+    <filler>kazkas kitas</filler>
+</contactsInfo>

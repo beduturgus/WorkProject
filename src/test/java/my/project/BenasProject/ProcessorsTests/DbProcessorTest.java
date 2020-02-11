@@ -5,8 +5,6 @@ import my.project.BenasProject.domain.ContactsInfo;
 import my.project.BenasProject.routes.processors.DbProcessor;
 import org.apache.camel.CamelContext;
 import org.apache.camel.EndpointInject;
-import org.apache.camel.Exchange;
-import org.apache.camel.Message;
 import org.apache.camel.Produce;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
@@ -30,7 +28,7 @@ import org.springframework.test.annotation.DirtiesContext;
 public class DbProcessorTest {
 
     private String PAYLOAD = Utils.getResource("xmlTestPayload.txt");
-    private String EXPECTED = Utils.getResource("jsonExpectedPayload.txt");
+    private String EXPECTED = Utils.getResource("xmlExpectedPayload.txt");
 
     private final String START_ENDPOINT = "jetty:http://0.0.0.0:8090/contactsInfo";
 
@@ -48,11 +46,7 @@ public class DbProcessorTest {
 
     @Before
     public void setUp() throws Exception {
-        DbProcessor dbProcessor1 = Mockito.mock(dbProcessor.getClass());
-        Mockito.doCallRealMethod().when(dbProcessor1).process(Mockito.any(Exchange.class));
-        Mockito.doCallRealMethod().when(dbProcessor1)
-            .convertToJsonString(Mockito.any(ContactsInfo.class));
-        Mockito.doCallRealMethod().when(dbProcessor1).checkMessageType(Mockito.any(Message.class));
+        DbProcessor dbProcessor1 = Mockito.spy(dbProcessor.getClass());
         Mockito.doNothing().when(dbProcessor1).persistData(Mockito.any(ContactsInfo.class));
 
         camelContext.addRoutes(new RouteBuilder() {
@@ -61,7 +55,6 @@ public class DbProcessorTest {
                 from(START_ENDPOINT).process(dbProcessor1).to(mockEndpoint);
             }
         });
-        camelContext.start();
     }
 
     @Test

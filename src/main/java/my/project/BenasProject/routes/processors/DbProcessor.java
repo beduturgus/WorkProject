@@ -2,6 +2,7 @@ package my.project.BenasProject.routes.processors;
 
 import com.google.gson.Gson;
 import java.sql.*;
+import javax.annotation.PreDestroy;
 import javax.xml.bind.JAXBException;
 import my.project.BenasProject.Utils;
 import my.project.BenasProject.domain.ContactsInfo;
@@ -21,7 +22,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class DbProcessor implements Processor {
 
-    private final Logger log = LoggerFactory.getLogger(DbProcessor.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(DbProcessor.class);
 
     @Value("${database.url}")
     String url;
@@ -41,10 +42,9 @@ public class DbProcessor implements Processor {
     @Override
     public void process(Exchange exchange) throws SQLException {
         Message message = exchange.getIn();
-        ContactsInfo contactsInfo = checkMessageType(message);
+        ContactsInfo contactsInfo = message.getBody(ContactsInfo.class);
         persistData(contactsInfo);
-        message.setBody(convertToJsonString(contactsInfo));
-        exchange.setOut(message);
+        message.setBody(contactsInfo);
     }
 
     public void persistData(ContactsInfo contactsInfo) throws SQLException {
@@ -57,14 +57,13 @@ public class DbProcessor implements Processor {
         st.setString(5, contactsInfo.getFiller());
         st.executeUpdate();
         st.close();
-        con.close();
-        log.info("New contactsInfo entry was added to database");
+        LOGGER.info("ContactsInfo was saved into database" + contactsInfo.toString());
     }
 
-    public String convertToJsonString(Object object) {
-        Gson gson = new Gson();
-        return gson.toJson(object);
-    }
+//    public String convertToJsonString(Object object) {
+//        Gson gson = new Gson();
+//        return gson.toJson(object);
+//    }
 
     public ContactsInfo checkMessageType(Message message) {
         ContactsInfo result = null;
@@ -79,5 +78,10 @@ public class DbProcessor implements Processor {
         }
         System.out.println("sdf");
         return result;
+    }
+
+    @PreDestroy
+    public void closeConnection() throws SQLException {
+        con.close();
     }
 }

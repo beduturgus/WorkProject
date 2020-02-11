@@ -44,14 +44,12 @@ public class ValidationProcessorTest {
 
     @Before
     public void setUp() throws Exception {
-        camelContext.getRoutes().clear();
         camelContext.addRoutes(new RouteBuilder() {
             @Override
             public void configure() {
                 from(START_ENDPOINT).process(validationProcessor).to(mockEndpoint);
             }
         });
-        camelContext.start();
     }
 
     @Test
