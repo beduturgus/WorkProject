@@ -27,7 +27,8 @@ public class XmlEnrichProcessor implements Processor {
         throws JAXBException, IllegalAccessException {
 
         Message message = exchange.getIn();
-        ContactsInfo contactsInfo = Utils.convertXmlToContactsInfo(message.getBody(String.class));
+        ContactsInfo contactsInfo = message.getBody(ContactsInfo.class);
+//        ContactsInfo contactsInfo = Utils.convertXmlToContactsInfo(message.getBody(String.class));
 
         ContactsInfo enrichedPayload = addDefaultFields(contactsInfo);
         message.setBody(enrichedPayload, ContactsInfo.class);

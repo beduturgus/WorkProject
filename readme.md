@@ -1,5 +1,3 @@
-Application goal to reach following requirements:
-
 **Functional requirements:**
 
 1. Expose endpoint to consume xml payload.

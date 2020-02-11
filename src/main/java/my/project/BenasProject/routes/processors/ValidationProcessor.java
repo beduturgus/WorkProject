@@ -33,11 +33,11 @@ public class ValidationProcessor implements Processor {
     public void process(Exchange exchange) throws IOException, ValidationException {
         Message message = exchange.getIn();
         String body = message.getBody(String.class);
-        boolean valid = isValid(body, "scheema/contactsInfoSchema.xsd");
+        boolean valid = isValid(body, "schema/contactsInfoSchema.xsd");
         if (valid) {
             message.setBody(body);
         } else {
-            throw new ValidationException("Received XML does not validate against xsd scheema. Payload: " +  body);
+            throw new ValidationException("Received XML does not validate against xsd schema. Payload: " +  body);
         }
     }
 

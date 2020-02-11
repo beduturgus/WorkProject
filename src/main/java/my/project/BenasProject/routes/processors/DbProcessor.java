@@ -44,7 +44,7 @@ public class DbProcessor implements Processor {
         Message message = exchange.getIn();
         ContactsInfo contactsInfo = checkMessageType(message);
         persistData(contactsInfo);
-        message.setBody(convertToJsonString(contactsInfo));
+        message.setBody(contactsInfo);
     }
 
     public void persistData(ContactsInfo contactsInfo) throws SQLException {
