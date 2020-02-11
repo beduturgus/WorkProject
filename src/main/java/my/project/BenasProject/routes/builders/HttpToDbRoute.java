@@ -1,5 +1,6 @@
 package my.project.BenasProject.routes.builders;
 
+import java.util.Date;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import my.project.BenasProject.domain.ContactsInfo;
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class HttpToDbRoute extends RouteBuilder {
 
-    final String DESTINATION_FOLDER = "/Users/benas/PROJECTS/Playground/BenasProject/data/routes/route_output";
+    final String DESTINATION_FOLDER = "data/route_output";
 
     @Autowired
     private Processor validationProcessor;
@@ -28,22 +29,22 @@ public class HttpToDbRoute extends RouteBuilder {
     @Override
     public void configure() throws JAXBException {
 
-//        JacksonDataFormat jacksonDataFormat = new JacksonDataFormat(ContactsInfo.class);
-//
-//        JaxbDataFormat jaxbDataFormat = new JaxbDataFormat();
-//        JAXBContext context = JAXBContext.newInstance(ContactsInfo.class);
-//        jaxbDataFormat.setContext(context);
+        JacksonDataFormat jacksonDataFormat = new JacksonDataFormat(ContactsInfo.class);
+
+        JaxbDataFormat jaxbDataFormat = new JaxbDataFormat();
+        JAXBContext context = JAXBContext.newInstance(ContactsInfo.class);
+        jaxbDataFormat.setContext(context);
 
         from("jetty:http://0.0.0.0:8090/contactsInfo")
             .routeId("HttpToDbRoute")
-//            .log("Payload is being send to validationProcessor at" + new Date().getTime())
+            .log("Payload is being send to validationProcessor at" + new Date().getTime())
             .process(validationProcessor)
-//            .unmarshal(jaxbDataFormat)
+            .unmarshal(jaxbDataFormat)
             .process(xmlEnrichProcessor)
-//            .marshal(jaxbDataFormat)
-            .process(dbProcessor)
-//            .unmarshal(jaxbDataFormat)
-//            .marshal(jacksonDataFormat)
+            .marshal(jaxbDataFormat)
+            .process(dbProcessor).id("DbProcessor")
+            .unmarshal(jaxbDataFormat)
+            .marshal(jacksonDataFormat)
             .to("file://" + DESTINATION_FOLDER);
     }
 }

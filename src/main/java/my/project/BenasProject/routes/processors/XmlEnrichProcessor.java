@@ -1,6 +1,7 @@
 package my.project.BenasProject.routes.processors;
 
 import java.lang.reflect.Field;
+import java.util.Arrays;
 import javax.xml.bind.JAXBException;
 import my.project.BenasProject.Utils;
 import my.project.BenasProject.domain.ContactsInfo;
@@ -24,11 +25,10 @@ public class XmlEnrichProcessor implements Processor {
 
     @Override
     public void process(Exchange exchange)
-        throws JAXBException, IllegalAccessException {
+        throws IllegalAccessException {
 
         Message message = exchange.getIn();
         ContactsInfo contactsInfo = message.getBody(ContactsInfo.class);
-//        ContactsInfo contactsInfo = Utils.convertXmlToContactsInfo(message.getBody(String.class));
 
         ContactsInfo enrichedPayload = addDefaultFields(contactsInfo);
         message.setBody(enrichedPayload, ContactsInfo.class);
@@ -36,6 +36,7 @@ public class XmlEnrichProcessor implements Processor {
 
     private ContactsInfo addDefaultFields(ContactsInfo contactsInfo) throws IllegalAccessException {
         int count = 0;
+
         for (Field field : contactsInfo.getClass().getDeclaredFields()) {
             String value = field.get(contactsInfo).toString();
             if (value.equals("")) {
@@ -43,7 +44,7 @@ public class XmlEnrichProcessor implements Processor {
                 field.set(contactsInfo, GENERATED_VALUE);
             }
         }
-        LOGGER.info(count + "fields were emty and now filled with string: " + GENERATED_VALUE);
+        LOGGER.info(count + " fields were empty and now filled with string: " + GENERATED_VALUE);
         return contactsInfo;
     }
 }

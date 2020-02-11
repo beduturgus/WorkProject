@@ -42,7 +42,7 @@ public class DbProcessor implements Processor {
     @Override
     public void process(Exchange exchange) throws SQLException {
         Message message = exchange.getIn();
-        ContactsInfo contactsInfo = checkMessageType(message);
+        ContactsInfo contactsInfo = message.getBody(ContactsInfo.class);
         persistData(contactsInfo);
         message.setBody(contactsInfo);
     }
@@ -60,10 +60,10 @@ public class DbProcessor implements Processor {
         LOGGER.info("ContactsInfo was saved into database" + contactsInfo.toString());
     }
 
-    public String convertToJsonString(Object object) {
-        Gson gson = new Gson();
-        return gson.toJson(object);
-    }
+//    public String convertToJsonString(Object object) {
+//        Gson gson = new Gson();
+//        return gson.toJson(object);
+//    }
 
     public ContactsInfo checkMessageType(Message message) {
         ContactsInfo result = null;

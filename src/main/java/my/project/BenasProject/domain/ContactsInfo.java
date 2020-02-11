@@ -13,7 +13,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class ContactsInfo implements Serializable {
 
-
     @NotNull
     @XmlElement
     public String name;
@@ -33,7 +32,6 @@ public class ContactsInfo implements Serializable {
     @Nullable
     @XmlElement
     public String filler;
-
 
     public String getName() {
         return name;
